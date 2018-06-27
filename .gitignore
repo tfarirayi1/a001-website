@@ -9,13 +9,6 @@
 # production
 /build
 
-#temp
-signin.js
-signup.js
-services.js
-service.js
-profile.js
-
 # misc
 .DS_Store
 .env.local

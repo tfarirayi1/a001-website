@@ -1,9 +1,9 @@
 import React from 'react';
 import {Route,Link,withRouter} from 'react-router-dom';
 import {ArrowUpwardIcon,ArrowBackIcon} from 'mdi-react';
-import 'styles/shell.scss';
 import {Routes} from '_routes';
-import {configureAuth} from '_helpers';
+import Helpers from '_helpers';
+import 'styles/shell.scss';
 
 class Shell extends React.Component{
     _stepBack(){
@@ -12,44 +12,45 @@ class Shell extends React.Component{
     constructor(props){
         super(props);
         this._stepBack=this._stepBack.bind(this);
-        configureAuth();
+    }
+    componentDidMount(){
+        Helpers.configureAuth();
     }
     render(){
         const {location}=this.props;
-        const layer_one=(
-            <div className="layer-one">
-                <div className="tool-panel">
-                    <div className="navigation-button">
-                        {
-                            location.pathname==='/'?(
-                                <ArrowBackIcon size="1em" onClick={this._stepBack}/>
-                            ):(
-                                <Link to="/">
-                                    <ArrowUpwardIcon size="1em"/>
-                                </Link>
-                            )
-                        }
-                    </div>
-                    <div className="label">
-                        project-a001
-                    </div>
-                </div>
-                <div className="view-panel">
-                    {
-                        Routes.map((item,index)=>{
-                            return(
-                                <div key={index}>
-                                    <Route exact path={item.endpoint} component={item.component}/>
-                                </div>
-                            );
-                        })
-                    }
-                </div>
-            </div>
+        const arrow_back=(<ArrowBackIcon size="1em" onClick={this._stepBack}/>);
+        const arrow_up=(
+            <Link to="/">
+                <ArrowUpwardIcon size="1em"/>
+            </Link>
         );
         return(
             <div id="shell">
-                {layer_one}
+                <div className="layer-one">
+                    <div className="tool-panel">
+                        <div className="navigation-button">
+                            {
+                                location.pathname==='/'?arrow_back:arrow_up
+                            }
+                        </div>
+                        <div className="label">
+                            project-a001
+                        </div>
+                    </div>
+                    <div className="view-panel">
+                        {
+                            Routes.map((a,b)=>{
+                                const item=a;
+                                const position=b;
+                                return(
+                                    <div key={position}>
+                                        <Route exact path={item.endpoint} component={item.component}/>
+                                    </div>
+                                );
+                            })
+                        }
+                    </div>
+                </div>
             </div>
         );
     }
